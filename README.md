@@ -44,7 +44,7 @@ Generates final resource names based on:
 - Index values for multiple instances
 
 ### 3. resourceGroup
-Specialized module for resource group naming
+Specialized module for resource group naming, outputing a naming ref for all dependent resources.
 
 ## 🚀 Usage
 
