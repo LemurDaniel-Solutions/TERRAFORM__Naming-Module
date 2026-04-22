@@ -10,8 +10,8 @@ locals {
     provider = split("::", var.resource)[0]
 
     # Retrives the actual resource part.
-    # - Microsoft.Compute/virtualMachines => type = virtualMachines
-    type = element(split("::", var.resource), -1)
+    # - Microsoft.Compute/virtualMachines => type = Microsoft.Compute/virtualMachines
+    type = split("::", var.resource)[1]
 
     # The kind is a modifier for the resource type. 
     # - Azure::Microsoft.Compute/disks::os       => kind = os
@@ -21,7 +21,7 @@ locals {
     # This is used for
     # - mapping to the correct abbreviation in default.abbreviations.yaml
     # - (optional) define additional patterns only for that subkind in default.naming.yaml
-    kind = strcontains(var.resource, "::") ? split("::", var.resource)[1] : "default"
+    kind = length(split("::", var.resource)) > 1 ? split("::", var.resource)[2] : "default"
   }
 
 

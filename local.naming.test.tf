@@ -20,7 +20,7 @@ module "naming_01" {
     count = 10
   }
 
-  resource = "Azure::Microsoft.Compute/disks"
+  resource = "Azure::Microsoft.Compute/disks::os"
 }
 
 

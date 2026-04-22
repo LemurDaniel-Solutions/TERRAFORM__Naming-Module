@@ -68,7 +68,7 @@ module "disk_naming" {
   source = "./modules/naming-generator"
   
   schema   = module.schema
-  resource = "Azure:Microsoft.Compute/disks"
+  resource = "Azure::Microsoft.Compute/disks::os"
   
   index = {
     count = 3  # Generates 3 different names with index
@@ -91,7 +91,7 @@ module "advanced_naming" {
   source = "./modules/naming-generator"
   
   schema   = module.schema
-  resource = "Azure:Microsoft.Storage/storageAccounts"
+  resource = "Azure::Microsoft.Storage/storageAccounts::default"
   location = "East US"
   
   parameters = {
@@ -113,46 +113,67 @@ module "advanced_naming" {
 ### 📋 default.naming.yaml Structure
 
 ```yaml
-# Default parameters
-default_parameters:
-  name: poc
+#
+# ################################################################################################
+# ## (Optional) Define default parameters.
 
-# Index modifier (starts at 1 instead of 0)
+default_parameters:
+
+#
+# ################################################################################################
+# ## Define general settings.
+
 index_modifier: 1
 
-# Case enforcement
 enforce_lower_case:
   default: true
+
   azurerm:
     default: false
     container_registry: true
     storage_account: true
 
-# Mappings for environments and locations
+#
+# ################################################################################################
+# ## Define any mappings for the schema.
+
 mappings:
+  # Map location names to their corresponding shortnames.
+  location:
+    global: glob
+
+    westeurope: euwe
+    West Europe: euwe
+
+    germanynorth: geno
+    Germany North: geno
+
+    germanywestcentral: gewc
+    Germany West Central: gewc
+
+  # Use shortened environment names.
   environment:
     development: dev
     staging: stg
+    test: tst
     production: prod
-    
-  location:
-    West Europe: euwe
-    westeurope: euwe
-    East US: eaus
 
-# Resource-specific patterns
+#
+# ################################################################################################
+# ## Define the patterns for generating names.
 
 patterns:
   default: "<TYPE>-<LOCATION>-<ENVIRONMENT>-<NAME>-<INDEX;%02s>-<UNIQUE_ID_4>"
 
-  azurerm:
+  Azure:
     default: "<TYPE>-<LOCATION>-<ENVIRONMENT>-<NAME>-<INDEX;%02s>"
 
-    container_registry:
+    Microsoft.ContainerRegistry/registries:
       default: "<TYPE>-<LOCATION>-<ENVIRONMENT>-<NAME>-<INDEX;%02s>"
 
-    storage_account:
+    Microsoft.Storage/storageAccounts:
       default: "<TYPE><LOCATION><ENVIRONMENT><NAME><INDEX;%02s>"
       # <name_id>: "<pattern>"
       # <name_kind>: "<pattern>"
+
 ```
